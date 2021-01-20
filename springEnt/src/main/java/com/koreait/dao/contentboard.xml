@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koreait.dao.MybatisDAO">
+	
+	<insert id="insertGA" parameterType="com.koreait.vo.ContentboardVO"> 
+		insert into contentboard (idx,name,subject,genre,company,cls,price,releaseDate,url,photo,platform) 
+		values(contentboard_idx_seq.nextval,#{name},#{subject},#{genre},#{company},#{cls},#{price},#{releaseDate},#{url},#{photo},#{platform})
+	</insert>
+	<select id="selectCounts" parameterType="com.koreait.vo.ContentboardVO" resultType="int">
+		select count(*) from contentboard where subject=#{subject}
+	</select>
+	<select id="selectCount" parameterType="com.koreait.vo.ContentboardVO" resultType="int">
+		select count(*) from contentboard 
+	</select>
+	<select id="selectLists" parameterType="com.koreait.vo.Param" resultType="com.koreait.vo.ContentboardVO">
+		<![CDATA[
+			select * from (
+				select rownum rnum, TT.* from(
+					select * from contentboard where subject=#{subject} order by idx desc
+				) TT where rownum <= #{endNo}
+			) where rnum >= #{startNo}
+		]]>
+	</select>
+	<select id="selectList" parameterType="java.util.HashMap" resultType="com.koreait.vo.ContentboardVO">
+		<![CDATA[
+			select * from (
+				select rownum rnum, TT.* from(
+					select * from contentboard order by idx desc
+				) TT where rownum <= #{endNo}
+			) where rnum >= #{startNo}
+		]]>
+	</select>
+	<select id="selectByIdxGame" parameterType="int" resultType="com.koreait.vo.ContentboardVO">
+		select * from contentboard where idx = #{idx}
+	</select>
+	<delete id="deleteCO" parameterType="int">
+		delete from contentboard where idx = #{idx}
+	</delete>
+	<update id="updateCO"	parameterType="com.koreait.vo.ContentboardVO">
+		update contentboard set price = #{price}, url = #{url},platform=#{platform}  where idx = #{idx}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
